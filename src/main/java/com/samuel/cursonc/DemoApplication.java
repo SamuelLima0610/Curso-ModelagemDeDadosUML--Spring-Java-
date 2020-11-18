@@ -15,6 +15,7 @@ import com.samuel.cursonc.domain.Category;
 import com.samuel.cursonc.domain.City;
 import com.samuel.cursonc.domain.Client;
 import com.samuel.cursonc.domain.Order;
+import com.samuel.cursonc.domain.OrderItem;
 import com.samuel.cursonc.domain.Payment;
 import com.samuel.cursonc.domain.Product;
 import com.samuel.cursonc.domain.State;
@@ -24,6 +25,7 @@ import com.samuel.cursonc.repositories.AddressRepository;
 import com.samuel.cursonc.repositories.CategoryRepository;
 import com.samuel.cursonc.repositories.CityRepository;
 import com.samuel.cursonc.repositories.ClientRepository;
+import com.samuel.cursonc.repositories.OrderItemRepository;
 import com.samuel.cursonc.repositories.OrderRepository;
 import com.samuel.cursonc.repositories.PaymentRepository;
 import com.samuel.cursonc.repositories.ProductRepository;
@@ -48,6 +50,8 @@ public class DemoApplication implements CommandLineRunner{
 	private OrderRepository orderRepo;
 	@Autowired
 	private PaymentRepository paymentRepo;
+	@Autowired
+	private OrderItemRepository orderItemRepo;	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -113,6 +117,19 @@ public class DemoApplication implements CommandLineRunner{
 		orderRepo.saveAll(Arrays.asList(od1, od2));
 		paymentRepo.saveAll(Arrays.asList(pagto1, pagto2));
 		
+		OrderItem oi1 = new OrderItem(0.00, 1, 2000.00, od1, p1);
+		OrderItem oi2 = new OrderItem(0.00, 1, 80.00, od1, p3);
+		OrderItem oi3 = new OrderItem(100.00, 1, 800.00, od2, p2);
+		
+		od1.getItems().addAll(Arrays.asList(oi1,oi2));
+		od2.getItems().addAll(Arrays.asList(oi3));
+		
+		p1.getItems().addAll(Arrays.asList(oi1));
+		p2.getItems().addAll(Arrays.asList(oi3));
+		p3.getItems().addAll(Arrays.asList(oi2));
+		
+		orderItemRepo.saveAll(Arrays.asList(oi1,oi2,oi3));
+	
 	}
 
 }
